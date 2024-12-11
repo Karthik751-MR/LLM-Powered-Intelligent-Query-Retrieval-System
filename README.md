@@ -92,6 +92,7 @@ pip install -r requirements.txt
 ---
 
 ## 🔗 Documentation  
+No documentation will be made available for this project since this project only uses technologies that already have their own documentation. Please refer to the following links for more information:
 - [LlamaIndex](https://llamaindex.ai/)  
 - [LangChain](https://langchain.com/)  
 - [ChromaDB](https://docs.trychroma.com/)
