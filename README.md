@@ -1,8 +1,8 @@
 # Insurance Documents QA RAG Chatbot  
 Your Intelligent Chat Assistant for Insurance Document Queries  
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
-[![Python](https://img.shields.io/badge/python-3.8%2B-brightgreen.svg)](https://www.python.org/)  
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8%2B-brightgreen.svg)](https://www.python.org/)
 
 ---
 
@@ -26,7 +26,7 @@ The Insurance Documents QA RAG Chatbot is an advanced conversational assistant d
 
 ## 🛠️ Tech Stack  
 - **Language**: Python  
-- **Frameworks/Libraries**: LlamaIndex, LangChain, ChromaDB, Pandas, Numpy, Transformers  
+- **Frameworks/Libraries**: LlamaIndex, LangChain, ChromaDB
 - **APIs/Models**:  
   - OpenAI's Embedding Model for vector creation 
   - OpenAI for high-quality generative responses
