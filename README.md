@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Insurance Documents QA RAG Chatbot  
 Your Intelligent Chat Assistant for Insurance Document Queries  
 
@@ -116,3 +117,6 @@ For questions, feedback, or collaboration opportunities:
 - **LinkedIn**: [Sandeep Gowda](https://www.linkedin.com/in/sandeepgowda24a319192)  
 
 ---
+=======
+# LLM-Powered-Intelligent-Query-Retrieval-System
+>>>>>>> 51dc1372fd0ebdff00c815e577282ef603169ffc
