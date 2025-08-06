@@ -1,122 +1,122 @@
-<<<<<<< HEAD
-# Insurance Documents QA RAG Chatbot  
-Your Intelligent Chat Assistant for Insurance Document Queries  
+# Multi-Backend RAG System for Document Q&A
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.8%2B-brightgreen.svg)](https://www.python.org/)
+## 1. Project Description
 
----
+This project is an intelligent query-retrieval system that answers natural language questions based on a collection of private documents. It implements a Retrieval-Augmented Generation (RAG) pipeline using LlamaIndex.
 
-## ✨ About the Project  
-The Insurance Documents QA RAG Chatbot is an advanced conversational assistant designed to streamline complex queries on insurance documents while also providing general information by conducting internet searches. Utilizing Retrieval-Augmented Generation (RAG) pipelines, the chatbot intelligently determines whether to retrieve information from a document or the web, ensuring accurate and contextually relevant responses.
+A key feature of this system is its resilient, multi-backend LLM setup. It ensures high availability by automatically falling back to secondary models if the primary model fails, providing a robust and reliable service.
 
----
+## 2. Tech Stack
 
-## 🔍 Key Features  
-- ✨ **Dual-Functionality Query Resolution**: Handles document-specific and general queries with smart tool selection.  
-- ☆ **Efficient Retrieval**: Employs **LlamaIndex** for accurate and efficient insurance data retrieval.  
-- ✪ **Agentic Generation**: Uses **LangChain** to intelligently generate responses or search the web for answers.  
-- ✨ **Scalable Embedding Storage**: Leverages **ChromaDB** to store and query embeddings with speed and accuracy.  
-- 🔑 **Advanced Caching Mechanism**: Minimizes redundant computations with:  
-  - Embedding-level cache for reprocessing prevention.  
-  - Query/answer cache for repeated queries.  
-- 🔄 **Dynamic Chunking**: Splits documents for optimal information retrieval.  
-- 🕒 **Real-Time Adaptability**: Decides between data retrieval and internet search based on query type.
+* **Core Framework**: LlamaIndex
+* **Programming Language**: Python
+* **LLM Providers**: Google Gemini, Local models via Ollama
+* **Embedding Model**: BAAI/bge-base-en-v1.5 (via HuggingFace)
+* **Vector Storage**: Local file system (`./storage/`)
+* **Python Libraries**: `python-dotenv`, `asyncio`
 
----
+## 3. LLM Fallback Logic
 
-## 🛠️ Tech Stack  
-- **Language**: Python  
-- **Frameworks/Libraries**: LlamaIndex, LangChain, ChromaDB
-- **APIs/Models**:  
-  - OpenAI's Embedding Model for vector creation 
-  - OpenAI for high-quality generative responses
-  - LlamaIndex for document ingestion and querying
-  - LangChain for agent orchestration.
-  - ChromaDB for efficient data storage.
+The system is configured to query multiple Large Language Models in a prioritized sequence to ensure a response is always generated, even if one service is down. The fallback order is defined in the `.env` file.
 
----
+The default logic is as follows:
+1. **Attempt 1: Google Gemini**: The system first tries to get a response using the `gemini-1.5-flash` model via the Google Gemini API.
+2. **Fallback to Local Models**: If the Gemini API call fails (due to an invalid key, network error, or server issue), the system automatically switches to using local models served by Ollama.
+3. **Iterate Through Local Models**: The system will try each local model specified in the `LOCAL_LLM_MODELS` environment variable in order. For example, if configured for `llama3,mistral`:
+   * It will first try **LLaMA 3**.
+   * If LLaMA 3 fails, it will then try **Mistral**.
+4. **Final Failure**: If all configured models (both cloud and local) fail, the program will raise an exception.
 
-## 🧪 Example Use Cases   
-- "What are the exclusions in my health insurance policy?"  
-- "How do I file an insurance claim?"  
-- "What is Drug Abuse related death?" (via web search) 
+This entire process is handled asynchronously to maintain performance.
 
----
+## 4. Folder Structure
 
-## 📸 Sample Output  
-### 1. Insurance Query Response  
-![Insurance Query Response](Sample%20Code%20Output%20Screenshots/Code%20Output%201.png)  
+The project is organized as follows:
 
-### 2. General Query Response with Web Search  
-![General Query Response](Sample%20Code%20Output%20Screenshots/Code%20Output%202.png)  
+```
+.
+├── data/
+│   └── BAJAJHLIP23020V012223.pdf
+│   └── ... (other PDF documents)
+├── storage/
+│   └── default__vector_store.json
+│   └── ... (persisted index files)
+├── .env
+├── ingest.py             # Script to process documents and create the vector index
+├── llm_config.py         # Configures and provides LLM and embedding models
+├── main.py               # Main script to load the index and query it
+├── requirements.txt      # Project dependencies
+└── ... (other helper scripts and cache files)
+```
 
----
+## 5. Setup Instructions
 
-## 🚀 Getting Started
+### Step 1: Clone the Repository
+```bash
+git clone <your-repository-url>
+cd <your-repository-name>
+```
 
-### Prerequisites
-Ensure you have the following installed:
-- Python 3.8+
-- Docker (optional, for containerized deployment)
+### Step 2: Install Dependencies
 
-### Installation
-1. Clone the repo:
-git clone https://github.com/SandeepGitGuy/Insurance_Documents_QA_Chatbot_RAG_LlamaIndex_LangChain.git
+Ensure you have Python 3.9+ installed. Then, install the required packages.
 
-2. Navigate to the project directory:
-cd Insurance_Documents_QA_Chatbot_RAG_LlamaIndex_LangChain
-
-3. Install the required dependencies:
+```bash
 pip install -r requirements.txt
+```
 
-- Please note: OpenAI API keys are required for the project to function.
+### Step 3: Set Up Environment Variables
 
-4. Run the main file from Jupyter environment:
-"Insurance_Docs_QA_Chatbot_RAG_Llamaindex_LangChain.ipynb"
+Create a file named `.env` in the root directory of the project and add the following variables.
 
----
+```ini
+# .env file
 
-## 🚂 Challenges Faced and Fixes  
-- **Dynamic Tool Selection**: Implemented robust logic to decide between document retrieval and internet search.  
-- **Caching Efficiency**: Added efficient multi-layer caching to optimize embedding and query-answer processes.  
-- **Cross-Model Compatibility**: Fine-tuned embeddings and outputs to work seamlessly with ChromaDB and OpenAI APIs.  
-- **Error Recovery**: Implemented memory-driven recovery mechanisms for enhanced reliability.  
+# Your Google Gemini API Key
+GOOGLE_GEMINI_API_KEY="YOUR_GEMINI_API_KEY_HERE"
 
----
+# Define the priority of LLM providers. The script will try them in this order.
+LLM_PRIORITY="gemini,local"
 
-## 🌐 Future Scope  
-- Support for multilingual documents and queries.  
-- Integration with additional file formats like Word and Excel.  
-- Incorporation of more generative AI models.  
+# Define the local models to try, in order. Must be served by Ollama.
+LOCAL_LLM_MODELS="llama3,mistral"
+```
 
----
+### Step 4: Set Up Local LLMs with Ollama
 
-## 🔗 Documentation  
-No documentation will be made available for this project since this project only uses technologies that already have their own documentation. Please refer to the following links for more information:
-- [LlamaIndex](https://llamaindex.ai/)  
-- [LangChain](https://langchain.com/)  
-- [ChromaDB](https://docs.trychroma.com/)
+1. Install [Ollama](https://ollama.com/) on your system.
+2. Pull the required local models from the Ollama library.
+   ```bash
+   ollama pull llama3
+   ollama pull mistral
+   ```
+3. Ensure the Ollama application is running in the background to serve the models.
 
----
+## 6. How to Run the Project
 
-## 🛡️ Conclusion  
-The Insurance Documents QA RAG Chatbot leverages state-of-the-art tools like LangChain and LlamaIndex to create a seamless query resolution experience. With its dual ability to handle document-based and general queries, it simplifies complex interactions while maintaining high performance and scalability. By integrating advanced caching and retrieval mechanisms, this chatbot offers an efficient, user-friendly solution for navigating insurance-related and general inquiries. Its robust foundation sets the stage for future innovations in AI-powered assistants.
+The project runs in two stages:
 
----
+### Stage 1: Ingest Documents
 
-## 🛡️ License  
-Distributed under the MIT License. See `LICENSE` for more details.  
+First, you need to process the documents in the `data/` folder and create a vector index. Run the `ingest.py` script for this.
 
----
+```bash
+python ingest.py
+```
 
-## 💬 Contact  
-For questions, feedback, or collaboration opportunities:  
-- **Email**: sandy974278@gmail.com  
-- **GitHub**: [SandeepGitGuy](https://github.com/SandeepGitGuy)  
-- **LinkedIn**: [Sandeep Gowda](https://www.linkedin.com/in/sandeepgowda24a319192)  
+This will create a `storage/` directory containing the persisted index. You only need to run this once, or whenever the documents in `data/` change.
 
----
-=======
-# LLM-Powered-Intelligent-Query-Retrieval-System
->>>>>>> 51dc1372fd0ebdff00c815e577282ef603169ffc
+### Stage 2: Query the Documents
+
+To ask a question, run the `main.py` script.
+
+```bash
+python main.py
+```
+
+This script will load the existing index, use the hardcoded test query, and utilize the fallback LLM logic to generate and print an answer.
+
+## 7. Expected Input/Output
+
+* **Input**: A natural language question (currently hardcoded in `main.py`).
+* **Output**: A text-based answer generated by one of the LLMs, which is printed to the console. The console logs will also show which LLM provider was successfully used.
