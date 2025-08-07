@@ -1,13 +1,15 @@
 import logging
 import asyncio
 from typing import List, Dict
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from utils import build_index_from_urls
 from rag_pipeline import query_and_get_answer
 
 logging.basicConfig(level=logging.INFO)
-app = FastAPI(title="HackRx Insurance RAG LLM API")
+app = FastAPI(title="Resilient RAG Document Q&A")
+auth_scheme = HTTPBearer()
 
 
 class RunRequest(BaseModel):
@@ -16,11 +18,15 @@ class RunRequest(BaseModel):
 
 
 class RunResponse(BaseModel):
+    success: bool
     answers: List[Dict]
+    processing_info: str
 
 
 @app.post("/hackrx/run", response_model=RunResponse)
-async def hackrx_run(payload: RunRequest):
+async def hackrx_run(
+    payload: RunRequest, token: HTTPAuthorizationCredentials = Depends(auth_scheme)
+):
     try:
         index = await build_index_from_urls(payload.documents)
         # Run all questions at once—super fast!
@@ -34,7 +40,11 @@ async def hackrx_run(payload: RunRequest):
             )
             for res in results
         ]
-        return RunResponse(answers=final_answers)
+        return RunResponse(
+            success=True,
+            answers=final_answers,
+            processing_info="Successfully processed all questions.",
+        )
     except Exception as e:
         logging.critical(f"A critical error occurred: {e}")
         raise HTTPException(status_code=500, detail=str(e))
