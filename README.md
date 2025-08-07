@@ -1,3 +1,17 @@
+---
+title: Resilient RAG Document Q&A
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_file: api.py
+app_port: 7860
+secrets:
+  - GOOGLE_GEMINI_API_KEY
+  - LLM_PRIORITY
+  - LOCAL_LLM_MODELS
+---
+
 # 🧠 Resilient RAG: The Indestructible Document Q&A Machine
 
 <div align="center">
