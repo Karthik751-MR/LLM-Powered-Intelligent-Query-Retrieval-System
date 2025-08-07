@@ -1,15 +1,26 @@
-gunicorn == 23.0.0
+# Web Server & Framework
 fastapi==0.116.1
+gunicorn==23.0.0
 uvicorn==0.35.0
-requests==2.32.4
-httpx==0.28.1
 pydantic==2.11.7
-ollama==0.5.2
-google-generativeai==0.8.5
 python-dotenv==1.1.1
-llama-index-embeddings-huggingface==0.6.0
-llama-index-llms-ollama==0.7.0
-llama-index-llms-gemini==0.6.0
+
+# LlamaIndex Core & LLM Integrations
 llama-index==0.13.0
+llama-index-llms-gemini==0.6.0
+llama-index-llms-ollama==0.7.0
+google-generativeai==0.8.5
+ollama==0.5.2
+
+# LlamaIndex Embeddings
+llama-index-embeddings-huggingface==0.6.0
 sentence-transformers==5.1.0
 huggingface-hub==0.34.3
+
+# Document Loading & Parsing
+unstructured[all-docs]
+python-docx
+
+# Networking
+httpx==0.28.1
+requests==2.32.4
