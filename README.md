@@ -4,8 +4,6 @@ emoji: 🤖
 colorFrom: blue
 colorTo: green
 sdk: docker
-app_file: api.py
-app_port: 7860
 secrets:
   - GOOGLE_GEMINI_API_KEY
   - LLM_PRIORITY
